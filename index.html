@@ -16,9 +16,30 @@ a{color:inherit}.topbar{position:sticky;top:0;z-index:50;background:rgba(7,19,31
 @page{size:A4;margin:12mm}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact} html,body{background:#fff!important;color:#111!important;font-size:11px}.topbar,.btns,.modal,.tabs{display:none!important}.hero,.section,.footer{padding:10mm 0 6mm;max-width:100%;page-break-inside:avoid}.hero{display:block}.hero h1{font-size:28px;color:#07304a;margin:8px 0}.hero p,.sub{font-size:12px;color:#333!important}.badge{background:#dff8f3!important;color:#07342e!important;border:1px solid #9ddbd0}.heroCard,.card,.phase{box-shadow:none!important;background:#fff!important;color:#111!important;border:1px solid #c8d2dc!important}.metric{border-top:1px solid #ddd}.bubble{background:#eaf7f4!important;color:#07342e!important;border-color:#b8d8d0}.metric span,.card p,.card li,.table td,.check,.phase p,.footer{color:#333!important}.section h2{font-size:20px;color:#07304a}.grid,.cols4,.cols3,.cols2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.flow{grid-template-columns:1fr 1fr;gap:8px}.phase{min-height:auto;padding:10px}.phase:after{display:none}.table{border-collapse:collapse;border-radius:0;border:1px solid #bbb;page-break-inside:auto}.table th{background:#eaf7f4!important;color:#07342e!important}.table td{background:#fff!important;color:#222!important}.table th,.table td{border:1px solid #bbb;padding:7px}.docPanel{display:block!important;page-break-inside:avoid;margin-bottom:10px}.checklist{grid-template-columns:1fr 1fr;gap:6px}.check{background:#fff!important;border:1px solid #ccc;color:#222!important}.swim{display:table;width:100%;border-collapse:collapse;border:1px solid #bbb}.swim div{display:table-cell;border:1px solid #bbb;background:#fff!important;color:#222!important;padding:6px;min-height:auto}.swim .head{background:#eaf7f4!important;color:#07342e!important}.legend{grid-template-columns:1fr 1fr 1fr 1fr}.pill{background:#fff!important;color:#222!important;border-color:#aaa}.accent,.blue,.ok,.warn,.danger{color:#07304a!important} }
+
+#login-screen{position:fixed;inset:0;background:#07131f;display:flex;justify-content:center;align-items:center;z-index:999999}
+.login-card{width:420px;background:#10263c;border:1px solid #24435d;border-radius:20px;padding:40px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.login-card h2{color:#f4f8fb;margin-bottom:15px}
+.login-card p{color:#a7bdd1}
+.login-card input{width:100%;padding:14px;margin-top:20px;border-radius:10px;border:1px solid #24435d;background:#071a2c;color:white}
+.login-card button{width:100%;margin-top:15px;padding:14px;border:none;border-radius:10px;background:linear-gradient(90deg,#11c5a7,#55a8ff);color:#06121d;font-weight:700;cursor:pointer}
+#error-message{color:#ff6b6b;margin-top:10px}
+
 </style>
 </head>
 <body>
+
+<div id="login-screen">
+<div class="login-card">
+<h2>🔒 Acesso Restrito</h2>
+<p>Informe a senha para acessar a metodologia de parceiros.</p>
+<input type="password" id="password" placeholder="Digite a senha" onkeypress="if(event.key==='Enter') validatePassword()">
+<button onclick="validatePassword()">Entrar</button>
+<p id="error-message"></p>
+</div>
+</div>
+<div id="protected-content" style="display:none;">
+
 <header class="topbar"><div class="nav"><div class="logo"><div class="mark">C</div><div>Compliance Soluções<br><span style="color:var(--muted);font-size:12px">Projetos de Suporte com Parceiros</span></div></div><nav class="navlinks"><a href="#visao">Visão</a><a href="#fluxo">Fluxo</a><a href="#documentos">Documentos</a><a href="#gates">Gates</a><a href="#raci">RACI</a><a href="#atendimento">Atendimento</a></nav></div></header>
 <main>
 <section class="hero" id="visao"><div><span class="badge">Metodologia Suporte ↔ Parceiros</span><h1>A metodologia do parceiro com o cliente pode existir. A metodologia da Compliance com o parceiro será esta.</h1><p>Esta apresentação define o modelo de interface entre Parceiros Implementadores e a área de <b>Projetos de Suporte</b> da Compliance. O objetivo é garantir documentação, previsibilidade, rastreabilidade e critérios claros para que o parceiro siga com a implementação sem depender de alinhamentos informais.</p><div class="btns"><button class="btn primary" onclick="document.querySelector('#fluxo').scrollIntoView()">Apresentar fluxo</button><button class="btn" onclick="window.print()">Imprimir / salvar PDF</button></div></div><aside class="heroCard"><h3>Mensagem central aos parceiros</h3><div class="metric"><div class="bubble">1</div><div><b>O parceiro conduz o cliente</b><span>Mas entrega para a Compliance os insumos necessários por fase.</span></div></div><div class="metric"><div class="bubble">2</div><div><b>Projetos de Suporte governa a interface</b><span>Sem documentação mínima, não há avanço de gate.</span></div></div><div class="metric"><div class="bubble">3</div><div><b>Evidência vale mais que relato</b><span>Blueprint, testes, UAT, cutover e aceite precisam estar formalizados.</span></div></div><div class="metric"><div class="bubble">4</div><div><b>Produção tem regra própria</b><span>N2 só atua em PRD com impacto e evidências anexadas.</span></div></div></aside></section>
@@ -67,5 +88,20 @@ function showTab(id,el){document.querySelectorAll('.docPanel').forEach(x=>x.clas
 function copyDoc(k){const d=docs[k];const text=d.title+'\n'+d.desc+'\n\n'+d.items.map(x=>'[ ] '+x).join('\n');navigator.clipboard.writeText(text);alert('Checklist copiado.');}
 window.onclick=e=>{if(e.target.id==='modal')closeModal()};init();
 </script>
+
+</div>
+<script>
+const PASSWORD="Compliance2026!";
+function validatePassword(){
+ const p=document.getElementById("password").value;
+ if(p===PASSWORD){
+   document.getElementById("login-screen").style.display="none";
+   document.getElementById("protected-content").style.display="block";
+ }else{
+   document.getElementById("error-message").innerText="Senha inválida.";
+ }
+}
+</script>
+
 </body>
 </html>
